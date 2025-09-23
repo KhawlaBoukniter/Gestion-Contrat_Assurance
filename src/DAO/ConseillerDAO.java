@@ -33,6 +33,24 @@ public class ConseillerDAO {
         p.executeUpdate();
     }
 
+    public List<Conseiller> getAll() throws Exception {
+        String sql = "SELECT * FROM conseiller";
+
+        PreparedStatement p = con.prepareStatement(sql);
+        ResultSet rs = p.executeQuery();
+        List<Conseiller> conseillers = new ArrayList();
+
+        while (rs.next()) {
+            Conseiller conseiller = new Conseiller();
+            conseiller.setId(rs.getString("id"));
+            conseiller.setNom(rs.getString("nom"));
+            conseiller.setPrenom(rs.getString("prenom"));
+            conseiller.setEmail(rs.getString("email"));
+
+            conseillers.add(conseiller);
+        }
+        return conseillers;
+    }
 
 }
 

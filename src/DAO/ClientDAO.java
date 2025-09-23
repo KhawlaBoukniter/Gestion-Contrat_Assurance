@@ -34,6 +34,24 @@ public class ClientDAO {
         p.executeUpdate();
     }
 
+    public List<Client> getAll() throws Exception {
+        String sql = "SELECT * FROM clients";
+
+        PreparedStatement p = con.prepareStatement(sql);
+        ResultSet rs = p.executeQuery();
+        List<Client> clients = new ArrayList();
+
+        while (rs.next()) {
+            Client client = new Client();
+            client.setNom(rs.getString("nom"));
+            client.setPrenom(rs.getString("prenom"));
+            client.setEmail(rs.getString("email"));
+            client.setConseiller(rs.getString("conseiller_id"));
+
+            clients.add(client);
+        }
+        return clients;
+    }
 }
 
 

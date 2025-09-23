@@ -38,4 +38,23 @@ public class ContratDAO {
         p.executeUpdate();
     }
 
+    public List<Contrat> getAll() throws Exception {
+        String sql = "SELECT * FROM contrats";
+
+        PreparedStatement p = con.prepareStatement(sql);
+        ResultSet rs = p.executeQuery();
+        List<Contrat> contrats = new ArrayList();
+
+        while (rs.next()) {
+            Contrat contrat = new Contrat();
+            contrat.setId(rs.getString("id"));
+            contrat.setTypeContrat(TypeContrat.valueOf(rs.getString("type_contrat")));
+            contrat.setDateDebut(rs.getTimestamp("date_debut").toLocalDateTime());
+            contrat.setDateFin(rs.getTimestamp("date_fin").toLocalDateTime());
+            contrat.setClient(rs.getString("client_id"));
+
+            contrats.add(contrat);
+        }
+        return contrats;
+    }
 }

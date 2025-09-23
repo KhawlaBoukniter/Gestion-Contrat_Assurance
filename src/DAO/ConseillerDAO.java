@@ -24,6 +24,15 @@ public class ConseillerDAO {
         p.executeUpdate();
     }
 
+    public void deleteConseiller(String id) throws Exception {
+        String sql = "DELETE FROM conseiller WHERE id = ?";
+
+        PreparedStatement p = con.prepareStatement(sql);
+        p.setString(1, id);
+
+        p.executeUpdate();
+    }
+
 
 }
 

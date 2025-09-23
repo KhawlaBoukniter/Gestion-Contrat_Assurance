@@ -30,4 +30,12 @@ public class ContratDAO {
         p.executeUpdate();
     }
 
+    public void deleteContrat(String id) throws Exception {
+        String sql = "DELETE FROM contrats WHERE id = ?";
+
+        PreparedStatement p = con.prepareStatement(sql);
+        p.setString(1, id);
+        p.executeUpdate();
+    }
+
 }

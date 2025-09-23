@@ -25,6 +25,15 @@ public class ClientDAO {
         p.executeUpdate();
 
     }
+
+    public void deleteClient(String id) throws Exception {
+        String sql = "DELETE FROM clients WHERE id = ?";
+
+        PreparedStatement p = con.prepareStatement(sql);
+        p.setString(1, id);
+        p.executeUpdate();
+    }
+
 }
 
 

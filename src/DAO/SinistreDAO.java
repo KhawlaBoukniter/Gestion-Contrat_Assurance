@@ -28,4 +28,12 @@ public class SinistreDAO {
         p.executeUpdate();
     }
 
+    public void deleteSinistre(String id) throws Exception {
+        String sql = "DELETE FROM sinistres WHERE id = ?";
+
+        PreparedStatement p = con.prepareStatement(sql);
+        p.setString(1, id);
+        p.executeQuery();
+    }
+
 }

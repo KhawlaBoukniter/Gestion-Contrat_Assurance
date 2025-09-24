@@ -15,4 +15,10 @@ public class ClientService {
         clientDAO.addClient(client);
     }
 
+    public Boolean deleteById(String id) throws Exception {
+        List<Client> clients = clientDAO.getAll();
+
+        return clients.removeIf(c -> id.equals(c.getId()));
+    }
+
 }

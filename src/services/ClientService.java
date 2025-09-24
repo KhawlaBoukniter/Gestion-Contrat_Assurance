@@ -34,4 +34,12 @@ public class ClientService {
         return clientDAO.getAll();
     }
 
+    public List<Client> getByName(String nom) throws Exception {
+        List<Client> clients = clientDAO.getAll().stream()
+                .filter(c -> nom.equals(c.getNom())).sorted()
+                .collect(Collectors.toList());
+
+        return clients;
+    }
+
 }

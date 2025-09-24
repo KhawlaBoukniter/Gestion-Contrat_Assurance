@@ -21,4 +21,13 @@ public class ClientService {
         return clients.removeIf(c -> id.equals(c.getId()));
     }
 
+    public Optional<Client> getById(String id) throws Exception {
+        List<Client> clients = clientDAO.getAll();
+        Optional<Client> client = clients.stream()
+                .filter(c -> id.equals(c.getId()))
+                .findFirst();
+
+        return client;
+    }
+
 }

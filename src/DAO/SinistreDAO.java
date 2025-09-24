@@ -36,4 +36,27 @@ public class SinistreDAO {
         p.executeQuery();
     }
 
+    public List<Sinistre> getAll() throws Exception {
+        String sql = "SELECT * FROM sinistres";
+
+        PreparedStatement p = con.prepareStatement(sql);
+        ResultSet rs = p.executeQuery();
+        List<Sinistre> sinistres = new ArrayList();
+
+        while (rs.next()) {
+            Sinistre sinistre = new Sinistre();
+
+            sinistre.setId(rs.getString("id"));
+            sinistre.setTypeSinistre(TypeSinistre.valueOf(rs.getString("type_sinistre")));
+            sinistre.setDate(rs.getTimestamp("date").toLocalDateTime());
+            sinistre.setDescription(rs.getString("description"));
+            sinistre.setCout(rs.getDouble("cout"));
+            sinistre.setContrat(rs.getString("contrat_id"));
+
+            sinistres.add(sinistre);
+        }
+        return sinistres;
+    }
+
+
 }

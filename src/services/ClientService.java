@@ -30,4 +30,8 @@ public class ClientService {
         return client;
     }
 
+    public List<Client> getAll() throws Exception {
+        return clientDAO.getAll();
+    }
+
 }

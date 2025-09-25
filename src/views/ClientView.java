@@ -15,6 +15,12 @@ public class ClientView {
     private ConseillerService conseillerService = new ConseillerService();
     private Scanner sc = new Scanner(System.in);
 
+    public ClientView(ClientService clientService) {
+        this.clientService = clientService;
+    }
+
+    public ClientView() {}
+
     public void menuClient() throws Exception {
         int choix;
         do {
@@ -38,10 +44,10 @@ public class ClientView {
                     supprimerClient();
                     break;
                 case 3:
-                    rechercherClientParId();
+                    rechercherClientParNom();
                     break;
                 case 4:
-                    rechercherClientParNom();
+                    rechercherClientParId();
                     break;
                 case 5:
                     afficherClientsParConseiller();
@@ -102,10 +108,7 @@ public class ClientView {
         System.out.print("ID du conseiller : ");
         String idConseiller = sc.nextLine();
 
-        // Conseiller conseiller = conseillerService.getById(idConseiller).orElse(null);
-
-        clientService.getByConseiller(idConseiller);
-        System.out.println("Fonction à compléter selon ton ConseillerService");
+        clientService.getByConseiller(idConseiller).forEach(System.out::println);
     }
 
 }

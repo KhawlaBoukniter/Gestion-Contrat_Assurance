@@ -67,8 +67,13 @@ public class ConseillerView {
         String email = sc.nextLine();
 
         Conseiller conseiller = new Conseiller(nom, prenom, email);
-        conseillerService.addConseiller(conseiller);
-        System.out.println("Conseiller ajouté avec ID : " + conseiller.getId());
+
+        if (conseillerService.addConseiller(conseiller)) {
+            System.out.println("Conseiller ajouté avec ID : " + conseiller.getId());
+        } else {
+            System.out.println("Conseiller déjà trouvé avec cet email");
+        }
+
     }
 
     private void supprimerConseiller() throws Exception {

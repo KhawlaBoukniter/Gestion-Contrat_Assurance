@@ -15,8 +15,9 @@ public class ConseillerService {
 
     public ConseillerService() {}
 
-    public void addConseiller(Conseiller conseiller) throws Exception {
-        conseillerDAO.addConseiller(conseiller);
+    public Boolean addConseiller(Conseiller conseiller) throws Exception {
+        return conseillerDAO.addConseiller(conseiller);
+
     }
 
     public void deleteById(String id) throws Exception {

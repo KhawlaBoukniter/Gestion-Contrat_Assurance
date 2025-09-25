@@ -12,7 +12,7 @@ import java.util.List;
 
 public class ConseillerDAO {
 
-    public void addConseiller(Conseiller conseiller) throws Exception {
+    public Boolean addConseiller(Conseiller conseiller) throws Exception {
         String sql = "INSERT INTO conseiller (id, nom, prenom, email) VALUES (?, ?, ?, ?)";
 
         Connection con = Database.getConnection();
@@ -23,8 +23,14 @@ public class ConseillerDAO {
             p.setString(4, conseiller.getEmail());
 
             p.executeUpdate();
+            return true;
         } catch (SQLException e) {
-            e.printStackTrace();
+            if (e.getErrorCode() == 1062) {
+                return false;
+            } else {
+                e.printStackTrace();
+            }
+            return false;
         }
     }
 

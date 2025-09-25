@@ -52,5 +52,42 @@ public class ConseillerView {
         } while (choix != 0);
     }
 
+    private void ajouterConseiller() throws Exception {
+        System.out.print("Nom: ");
+        String nom = sc.nextLine();
+        System.out.print("Prénom: ");
+        String prenom = sc.nextLine();
+        System.out.print("Email: ");
+        String email = sc.nextLine();
+
+        Conseiller conseiller = new Conseiller(nom, prenom, email);
+        conseillerService.addConseiller(conseiller);
+        System.out.println("Conseiller ajouté avec ID : " + conseiller.getId());
+    }
+
+    private void supprimerConseiller() throws Exception {
+        System.out.print("ID du conseiller à supprimer : ");
+        String id = sc.nextLine();
+        conseillerService.deleteById(id);
+        System.out.println("Conseiller supprimé si existant.");
+    }
+
+    private void rechercherConseillerParId() throws Exception {
+        System.out.print("ID du conseiller : ");
+        String id = sc.nextLine();
+        Optional<Conseiller> conseillerOpt = conseillerService.getById(id);
+        conseillerOpt.ifPresent(
+                c -> System.out.println("Conseiller trouvé : " + c.getNom() + " " + c.getPrenom()));
+    }
+
+    private void afficherClientsParConseiller() throws Exception {
+        System.out.print("ID du conseiller : ");
+        String idConseiller = sc.nextLine();
+
+        // Conseiller conseiller = conseillerService.getById(idConseiller).orElse(null);
+
+        clientService.getByConseiller(idConseiller);
+
+    }
 
 }

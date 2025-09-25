@@ -22,7 +22,7 @@ public class ClientView {
     public ClientView() {}
 
     public void menuClient() throws Exception {
-        int choix;
+        int choix = -1;
         do {
             System.out.println("\nGérer les Clients");
             System.out.println("1. Ajouter un client");
@@ -33,8 +33,14 @@ public class ClientView {
             System.out.println("0. Retour au menu précédent");
             System.out.print("Votre choix : ");
 
-            choix = sc.nextInt();
-            sc.nextLine();
+            if (sc.hasNextInt()) {
+                choix = sc.nextInt();
+                sc.nextLine();
+            } else {
+                System.out.println("Choix invalide. Veuillez saisir un nombre.");
+                sc.nextLine();
+                continue;
+            }
 
             switch (choix) {
                 case 1:
@@ -74,24 +80,38 @@ public class ClientView {
         String conseiller = sc.nextLine();
 
         Client client = new Client(nom, prenom, email, conseiller);
-        clientService.addClient(client);
-        System.out.println("Client ajouté avec ID : " + client.getId());
+
+        if (clientService.addClient(client)) {
+            System.out.println("Client ajouté avec ID : " + client.getId());
+        } else {
+            System.out.println("Client déjà trouvé avec cet email");
+        }
     }
 
     private void supprimerClient() throws Exception {
         System.out.print("ID du client à supprimer : ");
         String id = sc.nextLine();
-        clientService.deleteById(id);
-        System.out.println("Client supprimé si existant.");
+
+        if (clientService.deleteById(id)) {
+            System.out.println("Client supprimé.");
+        } else {
+            System.out.println("Aucun client trouvé avec cet ID.");
+        }
+
     }
 
     private void rechercherClientParId() throws Exception {
         System.out.print("ID du client : ");
         String id = sc.nextLine();
         Optional<Client> clientOpt = clientService.getById(id);
-        clientOpt.ifPresent(
-                c -> System.out.println("Client trouvé : " + c.getNom() + " " + c.getPrenom()));
+
+        if (clientOpt.isPresent()) {
+            Client c = clientOpt.get();
+            System.out.println("Client trouvé : " + c.getNom() + " " + c.getPrenom());
+        } else {
+            System.out.println("Aucun client trouvé avec cet ID.");
         }
+    }
 
     private void rechercherClientParNom() throws Exception {
         System.out.print("Nom à rechercher : ");
@@ -108,7 +128,14 @@ public class ClientView {
         System.out.print("ID du conseiller : ");
         String idConseiller = sc.nextLine();
 
-        clientService.getByConseiller(idConseiller).forEach(System.out::println);
+        List<Client> clients = clientService.getByConseiller(idConseiller);
+
+        if (clients.isEmpty()) {
+            System.out.println("Aucun client associé à ce conseiller.");
+        } else {
+            System.out.println("Liste des clients :");
+            clients.forEach(c -> System.out.println("- " + c.getNom() + " " + c.getPrenom()));
+        }
     }
 
 }

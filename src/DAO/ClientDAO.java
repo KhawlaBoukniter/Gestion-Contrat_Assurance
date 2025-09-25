@@ -12,7 +12,7 @@ import java.util.List;
 
 public class ClientDAO {
 
-    public void addClient(Client client) throws Exception {
+    public Boolean addClient(Client client) throws Exception {
         String sql = "INSERT INTO clients (id, nom, prenom, email, conseiller_id) VALUES (?, ?, ?, ?, ?)";
 
         Connection con = Database.getConnection();
@@ -24,21 +24,28 @@ public class ClientDAO {
             p.setString(5, client.getConseiller());
 
             p.executeUpdate();
-
+            return true;
         } catch (SQLException e) {
-            e.printStackTrace();
+            if (e.getErrorCode() == 1062) {
+                return false;
+            } else {
+                e.printStackTrace();
+            }
+            return false;
         }
     }
 
-    public void deleteClient(String id) throws Exception {
+    public Boolean deleteClient(String id) throws Exception {
         String sql = "DELETE FROM clients WHERE id = ?";
 
         Connection con = Database.getConnection();
         try (PreparedStatement p = con.prepareStatement(sql)) {
             p.setString(1, id);
-            p.executeUpdate();
+            int rows = p.executeUpdate();
+            return rows > 0;
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
     }
 
@@ -51,6 +58,7 @@ public class ClientDAO {
              ResultSet rs = p.executeQuery()) {
             while (rs.next()) {
                 Client client = new Client();
+                client.setId(rs.getString("id"));
                 client.setNom(rs.getString("nom"));
                 client.setPrenom(rs.getString("prenom"));
                 client.setEmail(rs.getString("email"));

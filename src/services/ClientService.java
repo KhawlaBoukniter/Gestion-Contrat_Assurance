@@ -27,12 +27,12 @@ public class ClientService {
         this.conseillerDAO = conseillerDAO;
     }
 
-    public void addClient(Client client) throws Exception {
-        clientDAO.addClient(client);
+    public Boolean addClient(Client client) throws Exception {
+        return clientDAO.addClient(client);
     }
 
-    public void deleteById(String id) throws Exception {
-        clientDAO.deleteClient(id);
+    public Boolean deleteById(String id) throws Exception {
+        return clientDAO.deleteClient(id);
     }
 
     public Optional<Client> getById(String id) throws Exception {

@@ -1,10 +1,11 @@
 package views;
 
 import models.Contrat;
-import models.TypeContrat;
+import enums.TypeContrat;
 import services.ContratService;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -12,6 +13,12 @@ public class ContratView {
 
     private ContratService contratService = new ContratService();
     private Scanner sc = new Scanner(System.in);
+
+    public ContratView(ContratService contratService) {
+        this.contratService = contratService;
+    }
+
+    public ContratView() {}
 
     public void menuContrat() throws Exception {
         int choix;
@@ -21,7 +28,7 @@ public class ContratView {
             System.out.println("2. Supprimer un contrat");
             System.out.println("3. Afficher les informations d'un contrat par ID");
             System.out.println("4. Afficher les contrats souscrits d'un client par ID");
-            System.out.println("0. Quitter");
+            System.out.println("0. Retour au menu precedent");
 
             choix = sc.nextInt();
             sc.nextLine();
@@ -58,6 +65,7 @@ public class ContratView {
         System.out.println("3. Maladie");
 
         choix = sc.nextInt();
+        sc.nextLine();
         TypeContrat lastCoice = null;
 
         switch (choix) {
@@ -79,9 +87,9 @@ public class ContratView {
 
     public void ajouterContrat() throws Exception {
         TypeContrat typeContrat = typeContrat();
-        System.out.print("Date de debut: ");
+        System.out.print("Date de debut (yyyy-MM-dd): ");
         LocalDateTime dateDebut = LocalDateTime.parse(sc.nextLine());
-        System.out.print("Date de fin: ");
+        System.out.print("Date de fin (yyyy-MM-dd): ");
         LocalDateTime dateFin = LocalDateTime.parse(sc.nextLine());
         System.out.print("ID du client: ");
         String clientId = sc.nextLine();
@@ -95,13 +103,20 @@ public class ContratView {
         System.out.print("ID du contrat à supprimer: ");
         String id = sc.nextLine();
         contratService.deleteById(id);
-
     }
 
-    private void AfficherContratById() throws Exception {
+    public void AfficherContratById() throws Exception {
         System.out.print("ID du contrat: ");
         String id = sc.nextLine();
         Optional<Contrat> contratOpt = contratService.getById(id);
         contratOpt.ifPresent(c -> System.out.print("Type: " + c.getTypeContrat() + " | Date début: " + c.getDateDebut() + " | Date Fin: " + c.getDateFin() + " | ID du client: " + c.getClient()));
+    }
+
+    public void AfficherContratsParClient() throws Exception {
+        System.out.print("ID du client: ");
+        String idClient = sc.nextLine();
+
+        contratService.getAllByClient(idClient).forEach(System.out::println);
+
     }
 }

@@ -1,14 +1,9 @@
 package models;
 
-import java.time.LocalDate;
+import enums.TypeContrat;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
-
-public enum TypeContrat {
-    AUTOMOBILE,
-    IMMOBILIER,
-    MALADIE
-}
 
 public class Contrat {
     private String id;
@@ -20,7 +15,7 @@ public class Contrat {
     public Contrat() {}
 
     public Contrat (LocalDateTime dateDebut, LocalDateTime dateFin, TypeContrat typeContrat, String client) {
-        this.id = id;
+        this.id = UUID.randomUUID().toString();
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
         this.typeContrat = typeContrat;
@@ -28,7 +23,6 @@ public class Contrat {
     }
 
     public String getId() { return id; }
-    public void setId( String id) { this.id = id; }
 
     public LocalDateTime getDateDebut() { return dateDebut; }
     public void setDateDebut(LocalDateTime dateDebut) { this.dateDebut = dateDebut; }

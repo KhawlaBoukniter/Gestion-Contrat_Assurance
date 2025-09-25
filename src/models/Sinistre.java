@@ -1,13 +1,9 @@
 package models;
 
+import enums.TypeSinistre;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
-
-public enum TypeSinistre {
-    ACCIDENT_VOITURE,
-    ACCIDENT_MAISON,
-    MALADIE
-}
 
 public class Sinistre {
     private String id;
@@ -29,7 +25,6 @@ public class Sinistre {
     }
 
     public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
 
     public LocalDateTime getDate() { return date; }
     public void setDate(LocalDateTime date) { this.date = date; }

@@ -9,30 +9,40 @@ import java.util.List;
 
 public class ContratDAO {
 
-    public void addContrat(Contrat contrat) throws Exception {
+    public Boolean addContrat(Contrat contrat) throws Exception {
         String sql = "INSERT INTO contrats (id, date_debut, date_fin, type_contrat, client_id) VALUES (?, ?, ?, ?, ?)";
 
-        try (Connection con = Database.getConnection(); PreparedStatement p = con.prepareStatement(sql);){
+        Connection con = Database.getConnection();
+        try (PreparedStatement p = con.prepareStatement(sql);){
             p.setString(1, contrat.getId());
-            p.setObject(2, Timestamp.valueOf(contrat.getDateDebut()));
-            p.setObject(3, Timestamp.valueOf(contrat.getDateFin()));
+            p.setDate(2, java.sql.Date.valueOf(contrat.getDateDebut()));
+            p.setDate(3, java.sql.Date.valueOf(contrat.getDateFin()));
             p.setObject(4, contrat.getTypeContrat().name());
             p.setObject(5, contrat.getClient());
 
             p.executeUpdate();
+            return true;
         } catch (SQLException e) {
-            e.printStackTrace();
+            if (e.getErrorCode() == 1062) {
+                return false;
+            } else {
+                e.printStackTrace();
+            }
+            return false;
         }
     }
 
-    public void deleteContrat(String id) throws Exception {
+    public Boolean deleteContrat(String id) throws Exception {
         String sql = "DELETE FROM contrats WHERE id = ?";
 
-        try (Connection con = Database.getConnection(); PreparedStatement p = con.prepareStatement(sql);){
+        Connection con = Database.getConnection();
+        try (PreparedStatement p = con.prepareStatement(sql);){
             p.setString(1, id);
-            p.executeUpdate();
+            int rows = p.executeUpdate();
+            return rows > 0;
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
     }
 
@@ -45,9 +55,10 @@ public class ContratDAO {
              ResultSet rs = p.executeQuery()) {
             while (rs.next()) {
                 Contrat contrat = new Contrat();
+                contrat.setId(rs.getString("id"));
                 contrat.setTypeContrat(TypeContrat.valueOf(rs.getString("type_contrat")));
-                contrat.setDateDebut(rs.getTimestamp("date_debut").toLocalDateTime());
-                contrat.setDateFin(rs.getTimestamp("date_fin").toLocalDateTime());
+                contrat.setDateDebut(rs.getDate("date_debut").toLocalDate());
+                contrat.setDateFin(rs.getDate("date_fin").toLocalDate());
                 contrat.setClient(rs.getString("client_id"));
 
                 contrats.add(contrat);

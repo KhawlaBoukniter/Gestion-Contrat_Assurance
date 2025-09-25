@@ -49,4 +49,59 @@ public class ContratView {
         } while (choix != 0);
     }
 
+    public TypeContrat typeContrat() {
+        int choix;
+
+        System.out.println("\nChoisissez le type de contrat");
+        System.out.println("1. Automobile");
+        System.out.println("2. Immobilier");
+        System.out.println("3. Maladie");
+
+        choix = sc.nextInt();
+        TypeContrat lastCoice = null;
+
+        switch (choix) {
+            case 1:
+                lastCoice = TypeContrat.AUTOMOBILE;
+                break;
+            case 2:
+                lastCoice = TypeContrat.IMMOBILIER;
+                break;
+            case 3:
+                lastCoice = TypeContrat.MALADIE;
+                break;
+            default:
+                System.out.println("Choix invalide");
+                break;
+        }
+        return lastCoice;
+    }
+
+    public void ajouterContrat() throws Exception {
+        TypeContrat typeContrat = typeContrat();
+        System.out.print("Date de debut: ");
+        LocalDateTime dateDebut = LocalDateTime.parse(sc.nextLine());
+        System.out.print("Date de fin: ");
+        LocalDateTime dateFin = LocalDateTime.parse(sc.nextLine());
+        System.out.print("ID du client: ");
+        String clientId = sc.nextLine();
+
+        Contrat contrat = new Contrat(dateDebut, dateFin, typeContrat, clientId);
+        contratService.addContract(contrat);
+        System.out.println("Contrat ajouté avec ID : " + contrat.getId());
+    }
+
+    public void supprimerContrat() throws Exception {
+        System.out.print("ID du contrat à supprimer: ");
+        String id = sc.nextLine();
+        contratService.deleteById(id);
+
+    }
+
+    private void AfficherContratById() throws Exception {
+        System.out.print("ID du contrat: ");
+        String id = sc.nextLine();
+        Optional<Contrat> contratOpt = contratService.getById(id);
+        contratOpt.ifPresent(c -> System.out.print("Type: " + c.getTypeContrat() + " | Date début: " + c.getDateDebut() + " | Date Fin: " + c.getDateFin() + " | ID du client: " + c.getClient()));
+    }
 }

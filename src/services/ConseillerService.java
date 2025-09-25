@@ -20,8 +20,8 @@ public class ConseillerService {
 
     }
 
-    public void deleteById(String id) throws Exception {
-        conseillerDAO.deleteConseiller(id);
+    public Boolean deleteById(String id) throws Exception {
+        return conseillerDAO.deleteConseiller(id);
     }
 
     public Optional<Conseiller> getById(String id) throws Exception {

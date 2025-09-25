@@ -34,16 +34,17 @@ public class ConseillerDAO {
         }
     }
 
-    public void deleteConseiller(String id) throws Exception {
+    public boolean deleteConseiller(String id) throws Exception {
         String sql = "DELETE FROM conseiller WHERE id = ?";
-
         Connection con = Database.getConnection();
+
         try (PreparedStatement p = con.prepareStatement(sql)) {
             p.setString(1, id);
-
-            p.executeUpdate();
+            int rows = p.executeUpdate();
+            return rows > 0;
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
     }
 
@@ -53,13 +54,14 @@ public class ConseillerDAO {
 
         Connection con = Database.getConnection();
         try (PreparedStatement p = con.prepareStatement(sql);
-             ResultSet rs = p.executeQuery();) {
+             ResultSet rs = p.executeQuery()) {
+
             while (rs.next()) {
                 Conseiller conseiller = new Conseiller();
+                conseiller.setId(rs.getString("id"));
                 conseiller.setNom(rs.getString("nom"));
                 conseiller.setPrenom(rs.getString("prenom"));
                 conseiller.setEmail(rs.getString("email"));
-
                 conseillers.add(conseiller);
             }
         } catch (SQLException e) {

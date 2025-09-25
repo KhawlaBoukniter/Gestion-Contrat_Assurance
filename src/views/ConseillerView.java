@@ -22,7 +22,7 @@ public class ConseillerView {
     public ConseillerView() {}
 
     public void menuConseiller() throws Exception {
-        int choix;
+        int choix = -1;
         do {
             System.out.println("\nGérer les Conseillers");
             System.out.println("1. Ajouter un conseiller");
@@ -32,8 +32,14 @@ public class ConseillerView {
             System.out.println("0. Retour au menu précédent");
             System.out.print("Votre choix : ");
 
-            choix = sc.nextInt();
-            sc.nextLine();
+            if (sc.hasNextInt()) {
+                choix = sc.nextInt();
+                sc.nextLine();
+            } else {
+                System.out.println("Choix invalide. Veuillez saisir un nombre.");
+                sc.nextLine();
+                continue;
+            }
 
             switch (choix) {
                 case 1:
@@ -79,24 +85,40 @@ public class ConseillerView {
     private void supprimerConseiller() throws Exception {
         System.out.print("ID du conseiller à supprimer : ");
         String id = sc.nextLine();
-        conseillerService.deleteById(id);
-        System.out.println("Conseiller supprimé si existant.");
+
+        if (conseillerService.deleteById(id)) {
+            System.out.println("Conseiller supprimé avec succès.");
+        } else {
+            System.out.println("Aucun conseiller trouvé avec cet ID.");
+        }
     }
 
     private void rechercherConseillerParId() throws Exception {
         System.out.print("ID du conseiller : ");
         String id = sc.nextLine();
+
         Optional<Conseiller> conseillerOpt = conseillerService.getById(id);
-        conseillerOpt.ifPresent(
-                c -> System.out.println("Conseiller trouvé : " + c.getNom() + " " + c.getPrenom()));
+
+        if (conseillerOpt.isPresent()) {
+            Conseiller c = conseillerOpt.get();
+            System.out.println("Conseiller trouvé : " + c.getNom() + " " + c.getPrenom() + " (" + c.getEmail() + ")");
+        } else {
+            System.out.println("Aucun conseiller trouvé avec cet ID.");
+        }
     }
 
     private void afficherClientsParConseiller() throws Exception {
         System.out.print("ID du conseiller : ");
         String idConseiller = sc.nextLine();
 
-        clientService.getByConseiller(idConseiller).forEach(System.out::println);
+        List<Client> clients = clientService.getByConseiller(idConseiller);
 
+        if (clients.isEmpty()) {
+            System.out.println("Aucun client associé à ce conseiller.");
+        } else {
+            System.out.println("Liste des clients :");
+            clients.forEach(c -> System.out.println("- " + c.getNom() + " " + c.getPrenom()));
+        }
     }
 
 }

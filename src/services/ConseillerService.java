@@ -9,13 +9,18 @@ import java.util.Optional;
 public class ConseillerService {
     private ConseillerDAO conseillerDAO = new ConseillerDAO();
 
+    public ConseillerService(ConseillerDAO conseillerDAO) {
+        this.conseillerDAO = conseillerDAO;
+    }
+
+    public ConseillerService() {}
+
     public void addConseiller(Conseiller conseiller) throws Exception {
         conseillerDAO.addConseiller(conseiller);
     }
 
-    public Boolean deleteById(String id) throws Exception {
-        List<Conseiller> conseillers = conseillerDAO.getAll();
-        return conseillers.removeIf(c -> id.equals(c.getId()));
+    public void deleteById(String id) throws Exception {
+        conseillerDAO.deleteConseiller(id);
     }
 
     public Optional<Conseiller> getById(String id) throws Exception {

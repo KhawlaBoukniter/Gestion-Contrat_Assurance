@@ -70,30 +70,41 @@ public class ClientView {
     }
 
     private void ajouterClient() throws Exception {
+        List<Conseiller> conseillers = conseillerService.getAll();
+
+        if (conseillers.isEmpty()) {
+            System.out.println("Aucun conseiller disponible");
+            return;
+        }
+
+        System.out.println("Liste des conseillers(ID - Nom Prénom):");
+        for (Conseiller c : conseillers) {
+            System.out.println(c.getId() + " - " + c.getNom() + " " + c.getPrenom());
+        }
+
         System.out.print("Nom: ");
         String nom = sc.nextLine();
         System.out.print("Prénom: ");
         String prenom = sc.nextLine();
         System.out.print("Email: ");
         String email = sc.nextLine();
-        System.out.print("ID conseiller: ");
-        String conseiller = sc.nextLine();
+        System.out.print("Entrez l'ID du conseiller choisi: ");
+        String conseillerId = sc.nextLine();
 
-        Client client = new Client(nom, prenom, email, conseiller);
-
-        if (clientService.addClient(client)) {
-            System.out.println("Client ajouté avec ID : " + client.getId());
-        } else {
-            System.out.println("Client déjà trouvé avec cet email");
+        try {
+            clientService.addClient(nom, prenom, email, conseillerId);
+            System.out.println("Client ajouté");
+        } catch (Exception e) {
+            System.out.println("Erreur : " + e.getMessage());
         }
     }
 
     private void supprimerClient() throws Exception {
-        System.out.print("ID du client à supprimer : ");
+        System.out.print("ID du client à supprimer: ");
         String id = sc.nextLine();
 
         if (clientService.deleteById(id)) {
-            System.out.println("Client supprimé.");
+            System.out.println("Client supprimé");
         } else {
             System.out.println("Aucun client trouvé avec cet ID.");
         }

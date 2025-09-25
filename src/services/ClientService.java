@@ -27,8 +27,18 @@ public class ClientService {
         this.conseillerDAO = conseillerDAO;
     }
 
-    public Boolean addClient(Client client) throws Exception {
-        return clientDAO.addClient(client);
+    public void addClient(String nom, String prenom, String email, String conseillerId) throws Exception {
+        List<Conseiller> conseillers = conseillerDAO.getAll();
+        boolean idValide = conseillers.stream().anyMatch(c -> conseillerId.equals(c.getId()));
+        if (!idValide) {
+            throw new Exception("ID de conseiller invalide");
+        }
+
+        Client client = new Client(nom, prenom, email, conseillerId);
+
+        if (!clientDAO.addClient(client)) {
+            throw new Exception("Client déjà trouvé avec cet email");
+        }
     }
 
     public Boolean deleteById(String id) throws Exception {
@@ -64,4 +74,4 @@ public class ClientService {
         return filteredclients;
     }
 
-    }
+}

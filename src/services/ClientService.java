@@ -1,24 +1,38 @@
 package services;
 
 import DAO.ClientDAO;
+import DAO.ConseillerDAO;
 import models.Client;
+import models.Conseiller;
 import models.Sinistre;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class ClientService {
     private ClientDAO clientDAO = new ClientDAO();
+    private ConseillerDAO conseillerDAO = new ConseillerDAO();
+    Scanner scanner = new Scanner(System.in);
+
+    public ClientService () {}
+
+    public ClientService (ClientDAO clientDAO) {
+        this.clientDAO = clientDAO;
+    }
+
+    public ClientService(ClientDAO clientDAO, ConseillerDAO conseillerDAO) {
+        this.clientDAO = clientDAO;
+        this.conseillerDAO = conseillerDAO;
+    }
 
     public void addClient(Client client) throws Exception {
         clientDAO.addClient(client);
     }
 
-    public Boolean deleteById(String id) throws Exception {
-        List<Client> clients = clientDAO.getAll();
-
-        return clients.removeIf(c -> id.equals(c.getId()));
+    public void deleteById(String id) throws Exception {
+        clientDAO.deleteClient(id);
     }
 
     public Optional<Client> getById(String id) throws Exception {
@@ -36,10 +50,18 @@ public class ClientService {
 
     public List<Client> getByName(String nom) throws Exception {
         List<Client> clients = clientDAO.getAll().stream()
-                .filter(c -> nom.equals(c.getNom())).sorted()
+                .filter(c -> c.getNom() != null && nom.equalsIgnoreCase(c.getNom())).sorted()
                 .collect(Collectors.toList());
 
         return clients;
     }
 
-}
+    public List<Client> getByConseiller(String id) throws Exception {
+        List<Client> filteredclients = clientDAO.getAll().stream()
+                .filter(s -> id.equals(s.getConseiller()))
+                .collect(Collectors.toList());
+
+        return filteredclients;
+    }
+
+    }

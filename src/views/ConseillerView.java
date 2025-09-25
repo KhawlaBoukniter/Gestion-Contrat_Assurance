@@ -15,6 +15,12 @@ public class ConseillerView {
     private ConseillerService conseillerService = new ConseillerService();
     private Scanner sc = new Scanner(System.in);
 
+    public ConseillerView(ConseillerService conseillerService) {
+        this.conseillerService = conseillerService;
+    }
+
+    public ConseillerView() {}
+
     public void menuConseiller() throws Exception {
         int choix;
         do {
@@ -84,9 +90,7 @@ public class ConseillerView {
         System.out.print("ID du conseiller : ");
         String idConseiller = sc.nextLine();
 
-        // Conseiller conseiller = conseillerService.getById(idConseiller).orElse(null);
-
-        clientService.getByConseiller(idConseiller);
+        clientService.getByConseiller(idConseiller).forEach(System.out::println);
 
     }
 

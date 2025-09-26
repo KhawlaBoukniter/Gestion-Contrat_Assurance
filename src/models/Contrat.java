@@ -2,19 +2,19 @@ package models;
 
 import enums.TypeContrat;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.UUID;
 
 public class Contrat {
     private String id;
-    private LocalDateTime dateDebut;
-    private LocalDateTime dateFin;
+    private LocalDate dateDebut;
+    private LocalDate dateFin;
     private TypeContrat typeContrat;
     private String client;
 
     public Contrat() {}
 
-    public Contrat (LocalDateTime dateDebut, LocalDateTime dateFin, TypeContrat typeContrat, String client) {
+    public Contrat (LocalDate dateDebut, LocalDate dateFin, TypeContrat typeContrat, String client) {
         this.id = UUID.randomUUID().toString();
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
@@ -23,12 +23,13 @@ public class Contrat {
     }
 
     public String getId() { return id; }
+    public void setId(String id) { this.id = id; }
 
-    public LocalDateTime getDateDebut() { return dateDebut; }
-    public void setDateDebut(LocalDateTime dateDebut) { this.dateDebut = dateDebut; }
+    public LocalDate getDateDebut() { return dateDebut; }
+    public void setDateDebut(LocalDate dateDebut) { this.dateDebut = dateDebut; }
 
-    public LocalDateTime getDateFin() { return dateFin; }
-    public void setDateFin(LocalDateTime dateFin) { this.dateFin = dateFin; }
+    public LocalDate getDateFin() { return dateFin; }
+    public void setDateFin(LocalDate dateFin) { this.dateFin = dateFin; }
 
     public TypeContrat getTypeContrat() { return typeContrat; }
     public void setTypeContrat(TypeContrat typeContrat) { this.typeContrat = typeContrat; }

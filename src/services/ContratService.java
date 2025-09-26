@@ -64,7 +64,7 @@ public class ContratService {
     public Boolean addContractWithClientId(String clientId, LocalDate dateDebut, LocalDate dateFin, TypeContrat typeContrat) throws Exception {
         List<Client> clients = clientDAO.getAll();
 
-        boolean existe = clients.stream().anyMatch(c -> clientId.equals(c.getId()));
+        Boolean existe = clients.stream().anyMatch(c -> clientId.equals(c.getId()));
         if (!existe) throw new Exception("Client inconnu");
 
         if (dateFin.isBefore(dateDebut)) {

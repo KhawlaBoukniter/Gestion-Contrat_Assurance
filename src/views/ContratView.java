@@ -88,20 +88,6 @@ public class ContratView {
         return lastCoice;
     }
 
-//    public void ajouterContrat() throws Exception {
-//        TypeContrat typeContrat = typeContrat();
-//        System.out.print("Date de debut (yyyy-MM-dd): ");
-//        LocalDate dateDebut = LocalDate.parse(sc.nextLine());
-//        System.out.print("Date de fin (yyyy-MM-dd): ");
-//        LocalDate dateFin = LocalDate.parse(sc.nextLine());
-//        System.out.print("ID du client: ");
-//        String clientId = sc.nextLine();
-//
-//        Contrat contrat = new Contrat(dateDebut, dateFin, typeContrat, clientId);
-//        contratService.addContract(contrat);
-//        System.out.println("Contrat ajouté avec ID : " + contrat.getId());
-//    }
-
     private void ajouterContrat() throws Exception {
         List<Client> clients = contratService.getAllClients();
         if (clients.isEmpty()) {
@@ -129,7 +115,7 @@ public class ContratView {
         }
 
         try {
-            boolean success = contratService.addContractWithClientId(clientId, dateDebut, dateFin, typeContrat);
+            Boolean success = contratService.addContractWithClientId(clientId, dateDebut, dateFin, typeContrat);
             if (success) {
                 System.out.println("Contrat créé avec le client ID : " + clientId);
             } else {

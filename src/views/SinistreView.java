@@ -1,5 +1,7 @@
 package views;
 
+import models.Client;
+import models.Contrat;
 import models.Sinistre;
 import enums.TypeSinistre;
 import services.SinistreService;
@@ -108,6 +110,17 @@ public class SinistreView {
     }
 
     public void ajouterSinistre() throws Exception {
+        List<Contrat> contrats = sinistreService.getAllContrats();
+        if (contrats.isEmpty()) {
+            System.out.println("Aucune contrat trouvée");
+            return;
+        }
+
+        System.out.println("Liste des contrats (ID - Type - Client) :");
+        for (Contrat c : contrats) {
+            System.out.println(c.getId() + " - " + c.getTypeContrat() + " - " + c.getClient());
+        }
+
         TypeSinistre type = typeSinistre();
         System.out.print("Description : ");
         String description = sc.nextLine();
@@ -118,11 +131,10 @@ public class SinistreView {
         System.out.print("ID du contrat associé : ");
         String contratId = sc.nextLine();
 
-        Sinistre s = new Sinistre(LocalDateTime.now(), cout, description, type, contratId);
         try {
-            Boolean success = sinistreService.addSinistre(s);
+            Boolean success = sinistreService.addSinistre(LocalDateTime.now(), description, cout, type, contratId);
             if (success) {
-                System.out.println("Sinistre ajouté avec succès : " + s);
+                System.out.println("Sinistre ajouté avec contrat : " + contratId);
             } else {
                 System.out.println("Erreur : impossible d'ajouter le sinistre");
             }

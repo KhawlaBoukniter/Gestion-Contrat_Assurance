@@ -3,6 +3,7 @@ package services;
 import DAO.ContratDAO;
 import DAO.Database;
 import DAO.SinistreDAO;
+import enums.TypeSinistre;
 import models.Client;
 import models.Contrat;
 import models.Sinistre;
@@ -30,10 +31,13 @@ public class SinistreService {
         this.sinistreDAO = sinistreDAO;
     }
 
-    public Boolean addSinistre(Sinistre sinistre) throws Exception {
-        if (contratDAO.getAll().stream().noneMatch(c -> c.getId().equals(sinistre.getContrat()))) {
-            throw new Exception("Contrat inconnu");
-        }
+    public Boolean addSinistre(LocalDateTime date, String description, Double cout, TypeSinistre typeSinistre, String contratId) throws Exception {
+        List<Contrat> contrats = contratDAO.getAll();
+
+        Boolean existe = contrats.stream().anyMatch(c -> contratId.equals(c.getId()));
+        if (!existe) throw new Exception("Contrat introuvable");
+
+        Sinistre sinistre = new Sinistre(date, cout, description, typeSinistre, contratId);
         return sinistreDAO.addSinistre(sinistre);
     }
 
@@ -112,6 +116,10 @@ public class SinistreService {
                 .filter(c -> c != null)
                 .mapToDouble(Double::doubleValue)
                 .sum();
+    }
+
+    public List<Contrat> getAllContrats() throws Exception {
+        return contratDAO.getAll();
     }
 
     public void creerSinistreAvecChoixContrat() throws Exception {

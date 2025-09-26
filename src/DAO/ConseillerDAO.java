@@ -34,7 +34,7 @@ public class ConseillerDAO {
         }
     }
 
-    public boolean deleteConseiller(String id) throws Exception {
+    public Boolean deleteConseiller(String id) throws Exception {
         String sql = "DELETE FROM conseiller WHERE id = ?";
         Connection con = Database.getConnection();
 

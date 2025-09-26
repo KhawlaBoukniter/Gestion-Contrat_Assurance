@@ -5,6 +5,8 @@ import enums.TypeSinistre;
 import services.SinistreService;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 
 public class SinistreView {
@@ -32,6 +34,7 @@ public class SinistreView {
             System.out.println("9. Afficher les sinistres dont le cout est superieur a un montant donné");
             System.out.println("0. Retour au menu précédent");
 
+            System.out.print("Votre choix: ");
             choix = sc.nextInt();
             sc.nextLine();
 
@@ -80,6 +83,7 @@ public class SinistreView {
         System.out.println("1. Accident de voiture");
         System.out.println("2. Accident de maison");
         System.out.println("3. Maladie");
+        System.out.print("Votre choix: ");
 
         choix = sc.nextInt();
         sc.nextLine();
@@ -115,63 +119,103 @@ public class SinistreView {
         String contratId = sc.nextLine();
 
         Sinistre s = new Sinistre(LocalDateTime.now(), cout, description, type, contratId);
-        sinistreService.addSinistre(s);
-        System.out.println("Sinistre ajouté avec ID : " + s.getId());
+        try {
+            Boolean success = sinistreService.addSinistre(s);
+            if (success) {
+                System.out.println("Sinistre ajouté avec succès : " + s);
+            } else {
+                System.out.println("Erreur : impossible d'ajouter le sinistre");
+            }
+        } catch (Exception e) {
+            System.out.println("Erreur : " + e.getMessage());
+        }
     }
 
     private void supprimerSinistre() throws Exception {
         System.out.print("ID du sinistre à supprimer : ");
         String id = sc.nextLine();
-        sinistreService.deleteById(id);
+        Boolean succes = sinistreService.deleteById(id);
+        if (succes) {
+            System.out.println("Sinistre supprimé avec succès");
+        } else {
+            System.out.println("Sinistre introuvable");
+        }
     }
 
     private void rechercherSinistre() throws Exception {
         System.out.print("ID du sinistre : ");
         String id = sc.nextLine();
-        sinistreService.getById(id)
-                .ifPresent(
-                        s -> System.out.println("Trouvé : " + s)
-                );
+        Optional<Sinistre> sinistre = sinistreService.getById(id);
+
+        if (sinistre.isPresent()) {
+            System.out.println("Trouvé : " + sinistre.get());
+        } else {
+            System.out.println("Sinistre non trouvé");
+        }
     }
 
     private void afficherParContrat() throws Exception {
         System.out.print("ID du contrat : ");
         String contratId = sc.nextLine();
-        sinistreService.getByContrat(contratId)
-                .forEach(System.out::println);
+
+        List<Sinistre> list = sinistreService.getByContrat(contratId);
+        if(list.isEmpty()){
+            System.out.println("Aucun sinistre trouvé pour ce contrat.");
+        } else {
+            list.forEach(System.out::println);
+        }
     }
 
     private void afficherParClient() throws Exception {
         System.out.print("ID du client : ");
         String clientId = sc.nextLine();
-        sinistreService.getSinistresByClientId(clientId)
-                .forEach(System.out::println);
+
+        List<Sinistre> list = sinistreService.getSinistresByClientId(clientId);
+        if(list.isEmpty()) {
+            System.out.println("Aucun sinistre trouvé pour ce client.");
+        } else {
+            list.forEach(System.out::println);
+        }
     }
 
     private void afficherAvantDate() throws Exception {
         System.out.print("Date limite (yyyy-MM-ddTHH:mm) : ");
         LocalDateTime date = LocalDateTime.parse(sc.nextLine());
-        sinistreService.getBeforeDate(date)
-                .forEach(System.out::println);
+
+        List<Sinistre> list = sinistreService.getBeforeDate(date);
+        if(list.isEmpty()) {
+            System.out.println("Aucun sinistre avant cette date.");
+        } else {
+            list.forEach(System.out::println);
+        }
     }
 
     private void afficherCoutSuperieur() throws Exception {
         System.out.print("Montant minimum : ");
-        double montant = sc.nextDouble();
+        Double montant = sc.nextDouble();
         sc.nextLine();
-        sinistreService.getByCoutGreaterThan(montant)
-                .forEach(System.out::println);
+
+        List<Sinistre> list = sinistreService.getByCoutGreaterThan(montant);
+        if(list.isEmpty()) {
+            System.out.println("Aucun sinistre supérieur à ce montant.");
+        } else {
+            list.forEach(System.out::println);
+        }
     }
 
     private void afficherTriesParMontant() throws Exception {
-        sinistreService.getSortedByCoutDesc()
-                .forEach(System.out::println);
+        List<Sinistre> list = sinistreService.getSortedByCoutDesc();
+        if(list.isEmpty()) {
+            System.out.println("Aucun sinistre trouvé.");
+        } else {
+            list.forEach(System.out::println);
+        }
     }
 
     private void calculerCoutTotal() throws Exception {
         System.out.print("ID du client : ");
         String clientId = sc.nextLine();
-        double total = sinistreService.calculateTotalCostByClientId(clientId);
+        Double total = sinistreService.calculateTotalCostByClientId(clientId);
         System.out.println("Cout total = " + total);
     }
 }

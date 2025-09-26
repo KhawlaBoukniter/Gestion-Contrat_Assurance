@@ -30,12 +30,15 @@ public class SinistreService {
         this.sinistreDAO = sinistreDAO;
     }
 
-    public void addSinistre(Sinistre sinistre) throws Exception {
-        sinistreDAO.addSinistre(sinistre);
+    public Boolean addSinistre(Sinistre sinistre) throws Exception {
+        if (contratDAO.getAll().stream().noneMatch(c -> c.getId().equals(sinistre.getContrat()))) {
+            throw new Exception("Contrat inconnu");
+        }
+        return sinistreDAO.addSinistre(sinistre);
     }
 
-    public void deleteById(String id) throws Exception {
-        sinistreDAO.deleteSinistre(id);
+    public Boolean deleteById(String id) throws Exception {
+        return sinistreDAO.deleteSinistre(id);
     }
 
     public Optional<Sinistre> getById(String id) throws Exception {
@@ -111,6 +114,36 @@ public class SinistreService {
                 .sum();
     }
 
+    public void creerSinistreAvecChoixContrat() throws Exception {
+        List<Contrat> contrats = contratDAO.getAll();
+        if (contrats.isEmpty()) {
+            System.out.println("Aucun contrat trouvé.");
+            return;
+        }
+        System.out.println("Liste des contrats (Type - Date debut - Date fin - Client):");
+        for (Contrat c : contrats) {
+            System.out.println(c.getId() + " - " + c.getTypeContrat() + " - " + c.getDateDebut() + " " + c.getDateFin() + " - " + c.getClient());
+        }
+
+        System.out.print("Entrez l'ID du contrat choisi: ");
+        String contratIdChoisi = scanner.nextLine();
+
+        boolean existe = contrats.stream().anyMatch(c -> contratIdChoisi.equals(c.getId()));
+        if (!existe) {
+            System.out.println("Contrat inconnu. Opération annulée.");
+            return;
+        }
+
+        Sinistre sinistre = new Sinistre();
+//         client.setId();
+//         client.setNom();
+//         client.setPrenom();
+//         client.setEmail();
+        sinistre.setContrat(contratIdChoisi);
+
+        sinistreDAO.addSinistre(sinistre);
+        System.out.println("Sinistre créé avec le client ID: " + contratIdChoisi);
+    }
 
 }
 

@@ -73,9 +73,9 @@ public class ContratDAO {
         String sql = "SELECT client_id FROM contrats WHERE id = ?";
 
         Connection con = Database.getConnection();
-        try (PreparedStatement p = con.prepareStatement(sql);
-             ResultSet rs = p.executeQuery();){
+        try (PreparedStatement p = con.prepareStatement(sql)){
             p.setString(1, contractId);
+            ResultSet rs = p.executeQuery();
 
             if (rs.next()) {
                 return rs.getString("client_id");

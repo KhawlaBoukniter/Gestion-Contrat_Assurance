@@ -9,7 +9,7 @@ import java.util.List;
 
 public class SinistreDAO {
 
-    public void addSinistre(Sinistre sinistre) throws Exception {
+    public Boolean addSinistre(Sinistre sinistre) throws Exception {
         String sql = "INSERT INTO sinistres (id, type_sinistre, date, cout, description, contrat_id) VALUES (?, ?, ?, ?, ?, ?)";
 
         Connection con = Database.getConnection();
@@ -22,20 +22,23 @@ public class SinistreDAO {
             p.setObject(6, sinistre.getContrat());
 
             p.executeUpdate();
+            return true;
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
     }
 
-    public void deleteSinistre(String id) throws Exception {
+    public Boolean deleteSinistre(String id) throws Exception {
         String sql = "DELETE FROM sinistres WHERE id = ?";
 
         Connection con = Database.getConnection();
         try (PreparedStatement p = con.prepareStatement(sql);) {
             p.setString(1, id);
-            p.executeUpdate();
+            return p.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
     }
 
@@ -49,7 +52,7 @@ public class SinistreDAO {
         {
             while (rs.next()) {
                 Sinistre sinistre = new Sinistre();
-
+                sinistre.setId(rs.getString("id"));
                 sinistre.setTypeSinistre(TypeSinistre.valueOf(rs.getString("type_sinistre")));
                 sinistre.setDate(rs.getTimestamp("date").toLocalDateTime());
                 sinistre.setDescription(rs.getString("description"));

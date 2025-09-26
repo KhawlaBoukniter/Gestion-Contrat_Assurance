@@ -107,7 +107,7 @@ src/
 
 1. **Cloner le projet**
 ```bash
-git clone https://github.com/KhawlaBoukniter/Gestion-Contrat_Assurance
+  git clone https://github.com/KhawlaBoukniter/Gestion-Contrat_Assurance
 ````
 
 2. **Configurer la base de données**
@@ -116,12 +116,12 @@ Modifier Database.java avec vos paramètres MySQL (url, utilisateur, mot de pass
 
 3. **Compiler les fichiers Java**
 ```bash
-javac -d bin src/**/*.java
+  javac -d bin src/**/*.java
 ````
 
 4. **Lancer l’application**
 ````bash
-java -cp bin Main
+  java -cp bin Main
 ````
 
 ## Remarques

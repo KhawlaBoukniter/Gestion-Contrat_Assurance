@@ -11,7 +11,7 @@ public class Person {
     public Person() {}
 
     public Person (String nom, String prenom, String email) {
-        this.id = UUID.randomUUID().toString();
+        this.id = UUID.randomUUID().toString().split("-")[0];
         this.nom = nom;
         this.prenom = prenom;
         this.email = email;

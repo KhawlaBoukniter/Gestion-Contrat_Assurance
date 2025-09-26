@@ -16,7 +16,7 @@ public class Sinistre {
     public Sinistre() {}
 
     public Sinistre(LocalDateTime date, Double cout, String description, TypeSinistre typeSinistre, String contrat) {
-        this.id = UUID.randomUUID().toString();
+        this.id = UUID.randomUUID().toString().split("-")[0];
         this.date = date;
         this.description = description;
         this.cout = cout;

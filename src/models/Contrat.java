@@ -15,7 +15,7 @@ public class Contrat {
     public Contrat() {}
 
     public Contrat (LocalDate dateDebut, LocalDate dateFin, TypeContrat typeContrat, String client) {
-        this.id = UUID.randomUUID().toString();
+        this.id = UUID.randomUUID().toString().split("-")[0];
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
         this.typeContrat = typeContrat;
